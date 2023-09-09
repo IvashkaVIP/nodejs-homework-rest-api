@@ -1,0 +1,15 @@
+
+09-09-2023_07:54:19 undefined undefined
+09-09-2023_07:54:22 undefined undefined
+09-09-2023_07:55:19 GET /api/contacts
+09-09-2023_07:55:20 GET /api/contacts
+09-09-2023_08:10:50 GET /api/contacts
+09-09-2023_08:10:52 GET /api/contacts
+09-09-2023_08:10:53 GET /api/contacts
+09-09-2023_10:18:36 GET /api/contacts
+09-09-2023_10:18:42 GET /api/contacts/10
+09-09-2023_10:19:38 POST /api/contacts/
+09-09-2023_10:19:49 POST /api/contacts/10
+09-09-2023_10:20:08 DELETE /api/contacts/10
+09-09-2023_10:20:21 PUT /api/contacts/10
+09-09-2023_10:21:26 GET /api/contacts
