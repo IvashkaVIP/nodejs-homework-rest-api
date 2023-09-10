@@ -1,12 +1,11 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const contactsRouter = require('./routes/api/contacts');
 
-const contacts = require("./models/contacts.json");
+// const contacts = require("./models/contacts.json");
 const fs = require("fs/promises");
 const moment = require("moment");
-
-const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
 
@@ -21,26 +20,6 @@ app.use(async (req, res, next) => {
   const date = moment().format("DD-MM-YYYY_hh:mm:ss");
   await fs.appendFile("./server.log", `\n${date} ${method} ${url}`);
   next();
-});
-
-app.get("/api/contacts", (req, res) => {
-  res.json(contacts);
-});
-
-app.get("/api/contacts/:id", (req, res) => {
-  res.json(contacts[0]);
-});
-
-app.post("/api/contacts", (req, res) => {
-  res.json(contacts[1]);
-});
-
-app.delete("/api/contacts/:id", (req, res) => {
-  res.json(contacts[2]);
-});
-
-app.put("/api/contacts/:id", (req, res) => {
-  res.json(contacts[3]);
 });
 
 // @ POST /api/contacts
