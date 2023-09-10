@@ -22,17 +22,6 @@ app.use(async (req, res, next) => {
   next();
 });
 
-// @ POST /api/contacts
-// @ DELETE /api/contacts/:id
-// @ PUT /api/contacts/:id
-
-// app.get("/api/contacts", (req, res) => {
-//   console.log(req.method);
-//   console.log(req.url);
-//   res.json(contacts);
-//   // res.send(contacts);
-// });
-
 app.use("/api/contacts", contactsRouter);
 
 app.use((req, res) => {
@@ -40,7 +29,8 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
+  const { status = 500, message = "Server error" } = err;
+  res.status(status).json(message);
 });
 
 module.exports = app;
