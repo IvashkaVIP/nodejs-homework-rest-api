@@ -43,18 +43,34 @@ router.post("/", async (req, res, next) => {
 
   });
 
-router.delete("/:id", async (req, res) => {
-  res.json(await contacts.removeContact("1"));
+router.delete("/:id", async (req, res,next) => {
+  try {
+    const { id } = req.params;
+    const result = await contacts.removeContact(id);
+    if (!result) throw HttpError(404, "Not found");
+    res.status(200).json({ message: "contact deleted" });
+  } catch (err) {
+    next(err)
+  }
+
+
+  
 });
 
-router.put("/:id", async (req, res) => {
-  res.json(
-    await contacts.updateContact("m2FZmeg6fiZH9FqEpAans", {
-      name: "Mihaylo",
-      phone: "(123)888888888888888",
-      // email: "miha@mail.com",
-    })
-  );
+router.put("/:id", async (req, res, next) => {
+  try {
+    const { error } = addShema.validate(req.body);
+    if (error) throw HttpError(400, error.message);
+    const { id } = req.params;
+    const result = await contacts.updateContact(id, req.body);
+    if (!result) throw HttpError(404, "Not found");
+    res.status(201).json(result);
+    
+  } catch (err) {
+    next (err)
+  }
+  
+  
 });
 
 module.exports = router;

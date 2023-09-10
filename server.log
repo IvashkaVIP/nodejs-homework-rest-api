@@ -55,3 +55,12 @@
 10-09-2023_02:43:55 POST /api/contacts/
 10-09-2023_02:46:15 POST /api/contacts/
 10-09-2023_02:46:25 POST /api/contacts/
+10-09-2023_03:16:45 PUT /api/contacts/ptqHsa30HfRjNWhXMDVjY
+10-09-2023_03:17:24 PUT /api/contacts/ptqHsa30HfRjNWhXMDVj
+10-09-2023_03:20:17 PUT /api/contacts/ptqHsa30HfRjNWhXMDVj
+10-09-2023_03:20:18 PUT /api/contacts/ptqHsa30HfRjNWhXMDVj
+10-09-2023_03:20:20 PUT /api/contacts/ptqHsa30HfRjNWhXMDVj
+10-09-2023_03:20:41 PUT /api/contacts/ptqHsa30HfRjNWhXMDVjY
+10-09-2023_03:28:16 DELETE /api/ptqHsa30HfRjNWhXMDVjY
+10-09-2023_03:28:47 DELETE /api/contacts/ptqHsa30HfRjNWhXMDVjY
+10-09-2023_03:28:57 DELETE /api/contacts/ptqHsa30HfRjNWhXMDVj
