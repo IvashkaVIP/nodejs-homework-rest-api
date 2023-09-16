@@ -1,10 +1,10 @@
 const app = require("./app");
 const mongoose = require("mongoose");
 const DB_HOST =
-  "mongodb+srv://Volodymyr:<password>@cluster0.1tdggh2.mongodb.net/db-contacts?retryWrites=true&w=majority";
+  "mongodb+srv://Volodymyr:pPUbKXGqZ86zXBwY@cluster0.1tdggh2.mongodb.net/db-contacts?retryWrites=true&w=majority";
 
 mongoose
-  .connect(BD_HOST)
+  .connect(DB_HOST)
   .then(() => {
     app.listen(3000);
     console.log("Database connection successful");
@@ -14,3 +14,4 @@ mongoose
 // app.listen(3000, () => {
 //   console.log("Server running. Use our API on port: 3000");
 // });
+// mongodb+srv://Volodymyr:pPUbKXGqZ86zXBwY@cluster0.1tdggh2.mongodb.net/
