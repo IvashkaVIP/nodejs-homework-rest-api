@@ -28,20 +28,15 @@ const addSchema = Joi.object({
     .max(40)
     .message("Name must be a minimum of 2 and a maximum of 40 characters")
     .required(),
-  email: Joi.string()
-    .email()
-    .pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
-    .message("Email should have the format example@email.com")
-    .required(),
+  email: Joi.string().email().message("Incorrect email format"),
   phone: Joi.string()
-    .min(2)
-    .max(40)
-    .message("Phone must be a minimum of 2 and a maximum of 40 characters")
-    .required(),
+    .pattern(/^\(\d{3}\) \d{3}-\d{4}$/)
+    .message("Incorrect phone format. Valid format: (xxx) xxx-xxxx"),
+  favorite: Joi.boolean(),
 });
 const updateFavoriteSchema = Joi.object({
-    favorite: Joi.boolean().required()
-})
+  favorite: Joi.boolean().required(),
+});
 contactSchema.post("save", handleMongooseError);
 
 const Contact = model("contact", contactSchema);
