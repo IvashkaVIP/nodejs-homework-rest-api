@@ -8,8 +8,8 @@ mongoose
   .then(() => {
     app.listen(PORT);
     console.log("Database connection successful");
-    console.log("sk >>>>>>>>>>>>   ", SECRET_KEY," >>> ",PORT, " >>> ", DB_HOST);
-  })
+console.log("sk >>>>>>>>>>>>   ", SECRET_KEY," >>> ",PORT, " >>> ", DB_HOST);
+    })
   .catch((err) => {
     console.log(err.message);
     process.exit(1);
