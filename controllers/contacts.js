@@ -3,12 +3,16 @@ const ctrlWrapper = require("../helpers/ctrlWrapper");
 const { Contact } = require("../models/contact");
 
 const listContacts = async (req, res) => {
-  const result = await Contact.find();
+  const { _id: owner } = req.user;
+  const result = await Contact.find({owner});
   res.status(200).json(result);
 };
 
 const addContact = async (req, res) => {
-  const result = await Contact.create(req.body);
+  // console.log("req.user >>>>>>", req.user);
+  const { _id: owner } = req.user;
+  console.log(" owner >>>>>>", owner);
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
