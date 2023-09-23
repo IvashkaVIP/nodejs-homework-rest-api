@@ -24,8 +24,14 @@ const login = async (req, res) => {
     res.json({token});
 }
 
+const current = async (req, res) => {
+    const { email } = req.user;
+    res.json({ email });
+}
+
 module.exports = {
     register: ctrlWrapper(register),
-    login: ctrlWrapper(login)
+    login: ctrlWrapper(login),
+    current: ctrlWrapper(current),
 }
 
