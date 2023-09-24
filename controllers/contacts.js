@@ -5,18 +5,15 @@ const { Contact } = require("../models/contact");
 const listContacts = async (req, res) => {
   const { _id: owner } = req.user;
   const { page = 1, limit = 10, favorite } = req.query;
-  let query={owner};
-  if (typeof(favorite)!=="undefined") query = { ...query, favorite };
-  console.log(page, "   ",limit, "   ", query);
+  let query = { owner };
+  if (typeof favorite !== "undefined") query = { ...query, favorite };
   const skip = (page - 1) * limit;
   const result = await Contact.find(query).skip(skip).limit(limit);
   res.status(200).json(result);
 };
 
 const addContact = async (req, res) => {
-  // console.log("req.user >>>>>>", req.user);
   const { _id: owner } = req.user;
-  console.log(" owner >>>>>>", owner);
   const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
