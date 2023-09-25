@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const ctrlWrapper = require("../helpers/ctrlWrapper");
 const HttpError = require("../helpers/HttpErrors");
 const gravatar = require("gravatar");
+const path = require("path");
+const fs = require("fs/promises");
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -19,6 +21,8 @@ const register = async (req, res) => {
     user: { email: newUser.email, subscription: newUser.subscription },
   });
 };
+
+const avatarsDir = path.join(__dirname,"../","public","avatars")
 
 const login = async (req, res) => {
   const { SECRET_KEY } = process.env;
@@ -68,7 +72,14 @@ const subscription = async (req, res) => {
 };
 
 const updateAvatar = async (req, res) => {
-  
+  const { _id } = req.user;
+  const { path: tempUpload, originalname } = req.file;
+  const filename = `${_id}_${originalname}`;
+  const resultUpload = path.join(avatarsDir, filename);
+  await fs.rename(tempUpload, resultUpload);
+  const avatarURL = path.join("avatars", filename);
+  await User.findByIdAndUpdate(_id, { avatarURL });
+  res.json({ avatarURL });  
 }
 
 module.exports = {
