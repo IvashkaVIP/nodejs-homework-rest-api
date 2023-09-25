@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const ctrlWrapper = require("../helpers/ctrlWrapper");
 const HttpError = require("../helpers/HttpErrors");
+const gravatar = require("gravatar");
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -12,7 +13,8 @@ const register = async (req, res) => {
     throw HttpError(409);
   }
   const hashPassword = await bcrypt.hash(password, 10);
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const avatarURL = gravatar.url(email);
+  const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL });
   res.status(201).json({
     user: { email: newUser.email, subscription: newUser.subscription },
   });
@@ -65,10 +67,15 @@ const subscription = async (req, res) => {
   });
 };
 
+const updateAvatar = async (req, res) => {
+  
+}
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   current: ctrlWrapper(current),
   logout: ctrlWrapper(logout),
   subscription: ctrlWrapper(subscription),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };
