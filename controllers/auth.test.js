@@ -12,7 +12,6 @@ describe("test SignUp function", () => {
         app.listen(PORT);
         console.log("Database connection successful");
       })
-
       .catch((err) => {
         console.log(err.message);
         process.exit(1);
@@ -24,7 +23,6 @@ describe("test SignUp function", () => {
   });
 
   const user = { email: "Petro@mail.com", password: "1234567890" };
-
   let result;
 
   test("the response must have status code 200", async () => {
@@ -37,9 +35,11 @@ describe("test SignUp function", () => {
   });
 
   test("the response should return a 'user' object with 2 fields: 'email' and 'subscription' with data type 'String'", () => {
-    expect(result.body.user).toMatchObject({
-      email: expect.any(String),
-      subscription: expect.any(String),
+    expect(result.body).toMatchObject({
+      user: {
+        email: expect.any(String),
+        subscription: expect.any(String),
+      },
     });
   });
 });
