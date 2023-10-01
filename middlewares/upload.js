@@ -12,9 +12,3 @@ const multerConfig = multer.diskStorage({
 const upLoad = multer({ storage: multerConfig });
 
 module.exports = { upLoad };
-
-// app.post("api/users/ava/", upLoad.single("cover"), async (req, res) => {
-//   console.log(req.body);
-//   console.log(req.file);
-// });
-
