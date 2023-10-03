@@ -8,10 +8,12 @@ const path = require("path");
 const fs = require("fs/promises");
 const jimp = require("jimp");
 const { nanoid } = require("nanoid");
-const { BASE_URL } = process.env;
 const sendEmail = require("../helpers/sendEmail");
 
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
+
 const register = async (req, res) => {
+  const { BASE_URL } = process.env;
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (user) {
@@ -25,7 +27,7 @@ const register = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: "verify email",
-    html: `<a target="_blank" href = "${BASE_URL}/api/auth/verify/${verificationToken}">Click to verify email</a>`,
+    html: `<a target="_blank" href = "${BASE_URL}/api/users/verify/${verificationToken}">Click to verify email</a>`,
   };
   await sendEmail(verifyEmail);
 
@@ -41,8 +43,6 @@ const register = async (req, res) => {
   });
 };
 
-const avatarsDir = path.join(__dirname, "../", "public", "avatars");
-
 const login = async (req, res) => {
   const { SECRET_KEY } = process.env;
   const { email, password } = req.body;
@@ -51,6 +51,8 @@ const login = async (req, res) => {
     res.json({ message: "Email or password is wrong" });
     throw HttpError(401);
   }
+  if (!user.verify) throw HttpError(401, "Email not verified");
+
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
     res.json({ message: "Email or password is wrong" });
@@ -64,6 +66,18 @@ const login = async (req, res) => {
     user: { email, subscription: user.subscription },
   });
 };
+
+const verifyEmail = async (req, res) => {
+  const { verificationToken } = req.params;
+  console.log(verificationToken);  
+  const user = await User.findOne({ verificationToken });
+  if (!user) throw HttpError(401, "Email not found");
+  await User.findByIdAndUpdate(user._id, {
+    verify: true,
+    verificationToken: "",
+  });
+  res.json({ message: "Email verify success" });
+}
 
 const current = async (req, res) => {
   const { email, subscription } = req.user;
@@ -105,6 +119,7 @@ const updateAvatar = async (req, res) => {
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
+  verifyEmail: ctrlWrapper(verifyEmail),
   current: ctrlWrapper(current),
   logout: ctrlWrapper(logout),
   subscription: ctrlWrapper(subscription),
