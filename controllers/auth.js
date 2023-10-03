@@ -69,7 +69,7 @@ const login = async (req, res) => {
 
 const verifyEmail = async (req, res) => {
   const { verificationToken } = req.params;
-  console.log(verificationToken);  
+  console.log(verificationToken);
   const user = await User.findOne({ verificationToken });
   if (!user) throw HttpError(401, "Email not found");
   await User.findByIdAndUpdate(user._id, {
@@ -77,7 +77,22 @@ const verifyEmail = async (req, res) => {
     verificationToken: "",
   });
   res.json({ message: "Email verify success" });
-}
+};
+
+const resendVerifyEmail = async (req, res) => {
+  const { BASE_URL } = process.env;
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) throw HttpError(401, "Email not found");
+  if (user.verify) throw HttpError(401, "Email already verify");
+  const verifyEmail = {
+    to: email,
+    subject: "verify email",
+    html: `<a target="_blank" href = "${BASE_URL}/api/users/verify/${user.verificationToken}">Click to verify email</a>`,
+  };
+  await sendEmail(verifyEmail);
+  res.json({ message: "Verify email send success" });
+};
 
 const current = async (req, res) => {
   const { email, subscription } = req.user;
@@ -120,6 +135,7 @@ module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   verifyEmail: ctrlWrapper(verifyEmail),
+  resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
   current: ctrlWrapper(current),
   logout: ctrlWrapper(logout),
   subscription: ctrlWrapper(subscription),
