@@ -51,8 +51,10 @@ const login = async (req, res) => {
     res.json({ message: "Email or password is wrong" });
     throw HttpError(401);
   }
-  if (!user.verify) throw HttpError(401, "Email not verified");
-
+  if (!user.verify) {
+    res.json({ message: "Email not verified" });
+    throw HttpError(401)
+  };
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
     res.json({ message: "Email or password is wrong" });
@@ -69,14 +71,17 @@ const login = async (req, res) => {
 
 const verifyEmail = async (req, res) => {
   const { verificationToken } = req.params;
-  console.log(verificationToken);
+  // console.log(verificationToken);
   const user = await User.findOne({ verificationToken });
-  if (!user) throw HttpError(401, "Email not found");
-  await User.findByIdAndUpdate(user._id, {
+  if (!user) {
+    res.json({message: "User not found"});
+    throw HttpError(404);
+  }
+    await User.findByIdAndUpdate(user._id, {
     verify: true,
     verificationToken: "",
   });
-  res.json({ message: "Email verify success" });
+  res.json({ message: "Verification successful" });
 };
 
 const resendVerifyEmail = async (req, res) => {
@@ -84,14 +89,17 @@ const resendVerifyEmail = async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
   if (!user) throw HttpError(401, "Email not found");
-  if (user.verify) throw HttpError(401, "Email already verify");
+  if (user.verify) {
+    res.json({ message: "Verification has already been passed" });
+    throw HttpError(400)
+  };
   const verifyEmail = {
     to: email,
     subject: "verify email",
     html: `<a target="_blank" href = "${BASE_URL}/api/users/verify/${user.verificationToken}">Click to verify email</a>`,
   };
   await sendEmail(verifyEmail);
-  res.json({ message: "Verify email send success" });
+  res.json({ message: "Verification email sent"});
 };
 
 const current = async (req, res) => {
