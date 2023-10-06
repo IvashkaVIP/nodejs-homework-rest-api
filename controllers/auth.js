@@ -53,8 +53,8 @@ const login = async (req, res) => {
   }
   if (!user.verify) {
     res.json({ message: "Email not verified" });
-    throw HttpError(401)
-  };
+    throw HttpError(401);
+  }
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
     res.json({ message: "Email or password is wrong" });
@@ -71,13 +71,12 @@ const login = async (req, res) => {
 
 const verifyEmail = async (req, res) => {
   const { verificationToken } = req.params;
-  // console.log(verificationToken);
   const user = await User.findOne({ verificationToken });
   if (!user) {
-    res.json({message: "User not found"});
+    res.json({ message: "User not found" });
     throw HttpError(404);
   }
-    await User.findByIdAndUpdate(user._id, {
+  await User.findByIdAndUpdate(user._id, {
     verify: true,
     verificationToken: "",
   });
@@ -91,15 +90,15 @@ const resendVerifyEmail = async (req, res) => {
   if (!user) throw HttpError(401, "Email not found");
   if (user.verify) {
     res.json({ message: "Verification has already been passed" });
-    throw HttpError(400)
-  };
+    throw HttpError(400);
+  }
   const verifyEmail = {
     to: email,
     subject: "verify email",
     html: `<a target="_blank" href = "${BASE_URL}/api/users/verify/${user.verificationToken}">Click to verify email</a>`,
   };
   await sendEmail(verifyEmail);
-  res.json({ message: "Verification email sent"});
+  res.json({ message: "Verification email sent" });
 };
 
 const current = async (req, res) => {
